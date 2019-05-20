@@ -2,12 +2,16 @@ package org.geeksword.mybatis;
 
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
-import org.mybatis.generator.api.dom.java.*;
+import org.mybatis.generator.api.dom.java.Field;
+import org.mybatis.generator.api.dom.java.InnerClass;
+import org.mybatis.generator.api.dom.java.TopLevelClass;
 import org.mybatis.generator.internal.DefaultCommentGenerator;
 import org.mybatis.generator.internal.util.StringUtility;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
+import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -88,4 +92,9 @@ public class ICommentGenerator extends DefaultCommentGenerator {
         addClassComment(innerClass, introspectedTable, false);
     }
 
+    @Override
+    public void addConfigurationProperties(Properties properties) {
+        super.addConfigurationProperties(properties);
+        suppressAllComments = Optional.ofNullable(properties.getProperty("suppressAllComments")).map(Boolean::parseBoolean).orElse(false);
+    }
 }
