@@ -1,4 +1,4 @@
-package org.geeksword.mybatis;
+package org.geeksword.mybatis.plugin;
 
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
@@ -8,6 +8,8 @@ import org.mybatis.generator.api.dom.java.Method;
 import org.mybatis.generator.api.dom.java.TopLevelClass;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
 
 /**
  * @Author: zhoulinshun
@@ -21,11 +23,28 @@ public class LombokAnnotationPlugin extends PluginAdapter {
     private final String noArgs = "@NoArgsConstructor";
     private final FullyQualifiedJavaType allArgsJavaType;
     private final FullyQualifiedJavaType noArgsJavaType;
-    private final FullyQualifiedJavaType fullyQualifiedJavaType;
+    private final FullyQualifiedJavaType dataJavaType;
     private final FullyQualifiedJavaType builderJavaType;
 
+    private boolean addData;
+
+    private boolean addBuilder;
+
+    private boolean addAllArgsConstructor;
+
+    private boolean addNoArgsConstructor;
+
+    @Override
+    public void setProperties(Properties properties) {
+        super.setProperties(properties);
+        addData = Optional.ofNullable(properties.getProperty("addData")).map(Boolean::new).orElse(true);
+        addBuilder = Optional.ofNullable(properties.getProperty("addBuilder")).map(Boolean::new).orElse(false);
+        addAllArgsConstructor = Optional.ofNullable(properties.getProperty("addAllArgsConstructor")).map(Boolean::new).orElse(false);
+        addNoArgsConstructor = Optional.ofNullable(properties.getProperty("addNoArgsConstructor")).map(Boolean::new).orElse(false);
+    }
+
     public LombokAnnotationPlugin() {
-        fullyQualifiedJavaType = new FullyQualifiedJavaType("lombok.Data");
+        dataJavaType = new FullyQualifiedJavaType("lombok.Data");
         builderJavaType = new FullyQualifiedJavaType("lombok.Builder");
         allArgsJavaType = new FullyQualifiedJavaType("lombok.AllArgsConstructor");
         noArgsJavaType = new FullyQualifiedJavaType("lombok.NoArgsConstructor");
@@ -53,14 +72,22 @@ public class LombokAnnotationPlugin extends PluginAdapter {
 
     private void addLombokAnnotation(TopLevelClass topLevelClass,
                                      IntrospectedTable introspectedTable) {
-        topLevelClass.addImportedType(fullyQualifiedJavaType);
-        topLevelClass.addImportedType(builderJavaType);
-        topLevelClass.addImportedType(allArgsJavaType);
-        topLevelClass.addImportedType(noArgsJavaType);
-        topLevelClass.addAnnotation(data);
-        topLevelClass.addAnnotation(builder);
-        topLevelClass.addAnnotation(allArgs);
-        topLevelClass.addAnnotation(noArgs);
+        if (addAllArgsConstructor) {
+            topLevelClass.addImportedType(allArgsJavaType);
+            topLevelClass.addAnnotation(allArgs);
+        }
+        if (addBuilder) {
+            topLevelClass.addImportedType(builderJavaType);
+            topLevelClass.addAnnotation(builder);
+        }
+        if (addNoArgsConstructor) {
+            topLevelClass.addImportedType(noArgsJavaType);
+            topLevelClass.addAnnotation(noArgs);
+        }
+        if (addData) {
+            topLevelClass.addImportedType(dataJavaType);
+            topLevelClass.addAnnotation(data);
+        }
     }
 
     /**
@@ -76,7 +103,7 @@ public class LombokAnnotationPlugin extends PluginAdapter {
 
 
     /**
-     *     该方法在生成每一个属性的setter方法时候调用，如果我们不想生成setter，直接返回false即可；
+     * 该方法在生成每一个属性的setter方法时候调用，如果我们不想生成setter，直接返回false即可；
      */
     @Override
     public boolean modelSetterMethodGenerated(Method method,

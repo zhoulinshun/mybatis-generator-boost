@@ -26,7 +26,7 @@ public class Main {
         boolean overwrite = true;
         // 指定配置文件
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
-        InputStream is = classloader.getResourceAsStream("generatorConfig.xml");
+        InputStream is = classloader.getResourceAsStream("test-generatorConfig.xml");
         ConfigurationParser cp = new ConfigurationParser(warnings);
         Configuration config = cp.parseConfiguration(is);
         DefaultShellCallback callback = new DefaultShellCallback(overwrite);

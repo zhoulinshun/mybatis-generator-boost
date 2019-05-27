@@ -7,22 +7,40 @@
     <context id="DB2Tables" targetRuntime="MyBatis3">
         <property name="javaFileEncoding" value="UTF-8"/>
         <property name="javaFormatter" value="org.mybatis.generator.api.dom.DefaultJavaFormatter"/>
-        <plugin type="org.geeksword.mybatis.SerializablePlugin"/>
-        <plugin type="org.mybatis.generator.plugins.MapperAnnotationPlugin"/>
-        <plugin type="org.geeksword.mybatis.GeneratedKeyPlugin"/>
-        <plugin type="org.geeksword.mybatis.LombokAnnotationPlugin"/>
-        <plugin type="org.geeksword.mybatis.FieldSortPlugin"/>
+        <!--        <plugin type="org.geeksword.mybatis.plugin.SerializablePlugin"/>-->
+        <!--        <plugin type="org.mybatis.generator.plugins.MapperAnnotationPlugin"/>-->
+        <!--        <plugin type="org.geeksword.mybatis.plugin.GeneratedKeyPlugin"/>-->
+        <!--        <plugin type="org.geeksword.mybatis.plugin.LombokAnnotationPlugin"/>-->
+        <!--        <plugin type="org.geeksword.mybatis.plugin.FieldSortPlugin"/>-->
 
-        <!--<!– 此处是将UserMapper改名为UserDao 接口 当然 想改成什么都行~  –>-->
-        <!--<plugin type="org.mybatis.com.ics.fundamental.druid.dao.generator.plugins.rename.RenameJavaMapperPlugin">-->
-        <!--<property name="searchString" value="Mapper"/>-->
-        <!--<property name="replaceString" value="Dao"/>-->
-        <!--</plugin>-->
+        <plugin type="org.geeksword.mybatis.StandardPlugin">
+            <!--添加序列化接口-->
+            <property name="enableSerializable" value="true"/>
+            <!--添加model/mapper注解-->
+            <property name="enableClassAnnotation" value="true"/>
+            <property name="mapperToAddAnnotations" value="org.springframework.stereotype.Repository"/>
 
-        <commentGenerator type="org.geeksword.mybatis.ICommentGenerator">
-            <!--<commentGenerator >-->
-            <property name="suppressAllComments" value="false"/>
-        </commentGenerator>
+            <!--添加自增主键insert返回值-->
+            <property name="enableGeneratedKey" value="true"/>
+            <!--添加表注释-->
+            <property name="enableComment" value="true"/>
+            <!--添加索引查询方法-->
+            <property name="enableIndexMethod" value="true"/>
+            <!--添加javax注解-->
+            <property name="enableJavax" value="true"/>
+            <property name="enableNotNull" value="true"/>
+            <property name="enableId" value="true"/>
+            <property name="enableDigits" value="true"/>
+            <property name="enableSize" value="true"/>
+
+            <!--添加lombok注解-->
+            <property name="enableLombok" value="true"/>
+            <!--删除BaseMap-->
+            <property name="enableRemoveBaseMap" value="true"/>
+            <!--添加抽象dao-->
+            <property name="enableAddSuperMapper" value="true"/>
+        </plugin>
+
         <!--数据库链接地址账号密码-->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
                         connectionURL="jdbc:mysql://:3306/?characterEncoding=UTF-8"
@@ -50,20 +68,10 @@
         </javaClientGenerator>
         <!--生成对应表及类名-->
 
-<!--        <table tableName="credit_info_adjust_serial"-->
-<!--               enableCountByExample="false"-->
-<!--               enableUpdateByExample="false"-->
-<!--               enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"/>-->
-
-<!--        <table tableName="credit_apply_serial"-->
-<!--               enableCountByExample="false"-->
-<!--               enableUpdateByExample="false"-->
-<!--               enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"/>-->
-
-                <table tableName="test" enableInsert="true"
-                       enableCountByExample="false"
-                       enableUpdateByExample="false"
-                       enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"/>
+        <table tableName="test" enableInsert="true"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"/>
 
     </context>
 </generatorConfiguration>

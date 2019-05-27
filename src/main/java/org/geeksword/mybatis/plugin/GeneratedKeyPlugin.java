@@ -1,4 +1,4 @@
-package org.geeksword.mybatis;
+package org.geeksword.mybatis.plugin;
 
 import org.mybatis.generator.api.IntrospectedColumn;
 import org.mybatis.generator.api.IntrospectedTable;
@@ -40,10 +40,7 @@ public class GeneratedKeyPlugin extends PluginAdapter {
 
     private void addGeneratedKeys(XmlElement element, IntrospectedTable introspectedTable) {
         List<IntrospectedColumn> primaryKeyColumns = introspectedTable.getPrimaryKeyColumns();
-        if (primaryKeyColumns != null && primaryKeyColumns.size() > 0) {
-            if (primaryKeyColumns.size() > 1) {
-                return;
-            }
+        if (primaryKeyColumns.size() == 1) {
             IntrospectedColumn introspectedColumn = primaryKeyColumns.get(0);
             if (introspectedColumn.isAutoIncrement()) {
                 element.addAttribute(useGeneratedKeys);

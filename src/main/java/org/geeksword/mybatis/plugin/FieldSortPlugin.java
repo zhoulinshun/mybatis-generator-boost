@@ -1,4 +1,4 @@
-package org.geeksword.mybatis;
+package org.geeksword.mybatis.plugin;
 
 import org.mybatis.generator.api.IntrospectedTable;
 import org.mybatis.generator.api.PluginAdapter;
